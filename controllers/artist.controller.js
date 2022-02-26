@@ -1,7 +1,7 @@
 const Artists = require("../models/artist.model");
 const artistController = {};
 
-artistController.getallartists = async (req, res) => {
+artistController.findAllartists = async (req, res) => {
   let responseData = {
     msg: "Error in fetching all artists",
     success: false,

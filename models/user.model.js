@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
     userid: {
       type: Number,
-      required: true,
     },
     email: {
       type: String,
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    lastname: {
+    last_name: {
       type: String,
       required: true,
     },
@@ -32,32 +32,20 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      required: true,
+      default: "user",
     },
     isLoggedIn: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     uuid: {
-      tye: String,
+      type: String,
     },
     accesstoken: {
       type: String,
     },
-    coupens: [
-      {
-        id: Number,
-        discountValue: Number,
-      },
-    ],
-    bookingRequests: [
-      {
-        reference_number: Number,
-        coupon_code: Number,
-        show_id: Number,
-        tickets: [{ type: Number }],
-      },
-    ],
+    coupens: [],
+    bookingRequests: [],
   },
   {
     toJSON: {
@@ -69,6 +57,24 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+//before saving in database
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  //console.log(this);
+  //hashpassword
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+//match password over here methods basically exports the isPasswordMAtched function
+userSchema.methods.isPasswordMatched = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

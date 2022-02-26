@@ -1,7 +1,7 @@
 const Genres = require("../models/genre.model");
 const genreController = {};
 
-genreController.getallGenres = async (req, res) => {
+genreController.findAllGenres = async (req, res) => {
   let responseData = {
     msg: "Error in fetching all Genres",
     success: false,

@@ -22,10 +22,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to Upgrad Movie booking application development.",
+  });
+});
+
 // app.use("/api", apiRouter);
 app.use("/movies", require("./routes/movie.routes"));
 app.use("/genres", require("./routes/genre.routes"));
 app.use("/artists", require("./routes/artist.routes"));
+app.use("/auth", require("./routes/user.routes"));
 // console.log(process);
 
 //call error handler after all your routes
