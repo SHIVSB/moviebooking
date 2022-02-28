@@ -1,16 +1,14 @@
-var createError = require("http-errors");
 var express = require("express");
-const PORT = 8085 || process.env.PORT;
+const PORT = 8085 || process.env.PORT; // starting the sever on port 8085 and if its not empty
+//the process.env.PORT finds a new empty port
 var path = require("path");
 var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var cors = require("cors");
-var dbConfig = require("./config/db.config");
-var dotenv = require("dotenv");
+var logger = require("morgan"); //to see the requests in the terminal
+var cors = require("cors"); // cross origin resource sharing
+var dbConfig = require("./config/db.config"); // requiring the database configuration
+var dotenv = require("dotenv"); // creating the dotenv file to store the important information
 // const { errorHandler, notFound } = require("./src/middlewares/error");
 dotenv.config();
-
-// var apiRouter = require("./routes/api");
 
 dbConfig();
 var app = express();
@@ -22,23 +20,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
+//creating the base response
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to Upgrad Movie booking application development.",
   });
 });
 
-// app.use("/api", apiRouter);
+//connecting with the movie router
 app.use("/api/movies", require("./routes/movie.routes"));
+//connecting with the genres router
 app.use("/api/genres", require("./routes/genre.routes"));
+//connecting with the artists router
 app.use("/api/artists", require("./routes/artist.routes"));
+//connecting with the user router
 app.use("/api/auth", require("./routes/user.routes"));
 // console.log(process);
 
-//call error handler after all your routes
-// app.use(notFound);
-// app.use(errorHandler);
-
+//to listen on the port provided
 app.listen(PORT, function (err) {
   if (err) {
     console.log("Error in starting server ..");

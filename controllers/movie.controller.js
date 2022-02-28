@@ -1,7 +1,9 @@
 const Movies = require("../models/movie.model");
 const movieController = {};
 
+//controller to find all movies
 movieController.findallmovies = async (req, res) => {
+  //creating a responsedata for sending details in a better way
   let responseData = {
     msg: "Error in fetching all movies",
     success: false,
@@ -23,6 +25,7 @@ movieController.findallmovies = async (req, res) => {
   }
 };
 
+//controller to find a single movie based on the movie ID
 movieController.findOne = async (req, res) => {
   let responseData = {
     msg: "Error in fetching the movie details",
@@ -30,9 +33,11 @@ movieController.findOne = async (req, res) => {
     result: "",
   };
 
+  //accepting the id of the movie via parameters
   const { id } = req.params;
 
   try {
+    //find the movie using find method of mongo
     const movie = await Movies.find({ movieid: id });
 
     responseData.msg = "movie details fetched successsfully";
@@ -41,36 +46,12 @@ movieController.findOne = async (req, res) => {
 
     // console.log(movies);
 
+    //sending the received movie response
     return res.status(200).send(movie);
   } catch (error) {
     console.log("Error in fetching the movie details");
 
-    return res.status(500).send(responseData);
-  }
-};
-
-movieController.findShows = async (req, res) => {
-  let responseData = {
-    msg: "Error in fetching the show details",
-    success: false,
-    result: "",
-  };
-
-  const { id } = req.params;
-
-  try {
-    const response = await Movies.find({ movieid: id });
-
-    responseData.msg = "show details fetched successsfully";
-    responseData.success = true;
-    responseData.response = response;
-
-    // console.log(shows);
-
-    return res.status(200).send(response);
-  } catch (error) {
-    console.log("Error in fetching the show details");
-
+    //sending the error response
     return res.status(500).send(responseData);
   }
 };
