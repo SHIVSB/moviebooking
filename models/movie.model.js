@@ -31,11 +31,7 @@ const movieSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    artists: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Artist",
-      required: [true, "Please artist is required"],
-    },
+    artists: [],
     genres: [
       {
         type: String,
@@ -59,21 +55,17 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    shows: [
-      {
-        id: Number,
-        theatre: [
-          {
-            name: String,
-            city: String,
-          },
-        ],
-        language: String,
-        show_timing: Date,
-        available_seats: String,
-        unit_price: Number,
+    shows: {
+      id: Number,
+      theatre: {
+        name: String,
+        city: String,
       },
-    ],
+      language: String,
+      show_timing: Date,
+      available_seats: String,
+      unit_price: Number,
+    },
   },
   {
     timestamps: true,

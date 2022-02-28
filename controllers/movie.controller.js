@@ -13,7 +13,7 @@ movieController.findallmovies = async (req, res) => {
 
     responseData.msg = "movies fetched successsfully";
     responseData.success = true;
-    responseData.result = movies;
+    responseData.movies = movies;
 
     return res.status(200).send(responseData);
   } catch (error) {
@@ -33,15 +33,15 @@ movieController.findOne = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const movies = await Movies.findById(id).populate("");
+    const movie = await Movies.find({ movieid: id });
 
     responseData.msg = "movie details fetched successsfully";
     responseData.success = true;
-    responseData.result = movies;
+    responseData.movies = movie;
 
     // console.log(movies);
 
-    return res.status(200).send(responseData);
+    return res.status(200).send(movie);
   } catch (error) {
     console.log("Error in fetching the movie details");
 
@@ -59,15 +59,15 @@ movieController.findShows = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const shows = await Movies.findById(id);
+    const response = await Movies.find({ movieid: id });
 
     responseData.msg = "show details fetched successsfully";
     responseData.success = true;
-    responseData.result = shows.shows;
+    responseData.response = response;
 
     // console.log(shows);
 
-    return res.status(200).send(responseData);
+    return res.status(200).send(response);
   } catch (error) {
     console.log("Error in fetching the show details");
 
@@ -91,7 +91,7 @@ movieController.published = async (req, res) => {
 
     // console.log(movies);
 
-    return res.status(200).send(responseData);
+    return res.status(200).send(movies);
   } catch (error) {
     console.log("Error in fetching the movie details by status");
 
@@ -115,7 +115,7 @@ movieController.released = async (req, res) => {
 
     // console.log(movies);
 
-    return res.status(200).send(responseData);
+    return res.status(200).send(movies);
   } catch (error) {
     console.log("Error in fetching the movie details by status");
 

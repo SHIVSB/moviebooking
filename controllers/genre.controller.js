@@ -13,7 +13,7 @@ genreController.findAllGenres = async (req, res) => {
 
     responseData.msg = "Genres fetched successsfully";
     responseData.success = true;
-    responseData.result = genres;
+    responseData.genres = genres;
 
     return res.status(200).send(responseData);
   } catch (error) {

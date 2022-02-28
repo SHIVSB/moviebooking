@@ -13,7 +13,7 @@ artistController.findAllartists = async (req, res) => {
 
     responseData.msg = "Artists fetched successsfully";
     responseData.success = true;
-    responseData.result = artists;
+    responseData.artists = artists;
 
     return res.status(200).send(responseData);
   } catch (error) {

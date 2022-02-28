@@ -73,10 +73,36 @@ userController.signin = async (req, res) => {
   }
 };
 
+userController.getCouponCode = async (req, res) => {
+  let responseData = {
+    msg: "Error in fetching the coupon code",
+    success: false,
+    result: "",
+  };
+
+  const { _id } = req.user;
+  //   console.log(req.user);
+  try {
+    const users = await User.findById(_id);
+
+    responseData.msg = "coupon code fetched fetched successsfully ";
+    responseData.success = true;
+    responseData.result = users.coupens;
+
+    // console.log(users.coupens);
+
+    return res.status(200).send(responseData);
+  } catch (error) {
+    console.log("Error in fetching the coupon code");
+
+    return res.status(500).send("Error in fetching the coupon code");
+  }
+};
+
 userController.logout = async (req, res) => {
   try {
-    res.clearCookie('authorization');
-
+    res.clearCookie("authorization");
+    // res.redirect("/");
     return res.status(200).send("User logged out successfully");
   } catch (error) {
     return res.status(500).send("Error in logging out the user");

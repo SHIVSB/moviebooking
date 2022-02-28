@@ -45,7 +45,14 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     coupens: [],
-    bookingRequests: [],
+    bookingRequests: [
+      {
+        reference_number: Number,
+        coupon_code: Number,
+        show_id: Number,
+        tickets: [],
+      },
+    ],
   },
   {
     toJSON: {

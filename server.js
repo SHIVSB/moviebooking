@@ -1,6 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
-const PORT = 9000 || process.env.PORT;
+const PORT = 8085 || process.env.PORT;
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -29,10 +29,10 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api", apiRouter);
-app.use("/movies", require("./routes/movie.routes"));
-app.use("/genres", require("./routes/genre.routes"));
-app.use("/artists", require("./routes/artist.routes"));
-app.use("/auth", require("./routes/user.routes"));
+app.use("/api/movies", require("./routes/movie.routes"));
+app.use("/api/genres", require("./routes/genre.routes"));
+app.use("/api/artists", require("./routes/artist.routes"));
+app.use("/api/auth", require("./routes/user.routes"));
 // console.log(process);
 
 //call error handler after all your routes
