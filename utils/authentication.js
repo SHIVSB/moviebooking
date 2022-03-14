@@ -5,28 +5,28 @@ const generateToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_KEY, { expiresIn: "10d" });
 };
 
-const authMiddleware = async(req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   let token;
 
-  if(req.headers.authorization.startsWith('Bearer')){
+  if (req.headers.Authorization.startsWith("Basic")) {
     try {
-      token = req.headers.authorization.split(" ")[1];
-      if(token){
+      token = req.headers.Authorization.split(" ")[1];
+      if (token) {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         //find the user by id
-        const user = await User.findById(decoded.id).select('-password');
+        const user = await User.findById(decoded.id).select("-password");
         //attach the user to req
-        req.user = user
+        req.user = user;
         next();
       }
-    }catch(error){
-      res.status(500).send("User not authorized")
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("User not authorized");
     }
-  }else{
-    console.log("No authorization token");
+  } else {
 
     return res.status(500).send("No authorization token detected");
   }
-}
+};
 
-module.exports = {generateToken, authMiddleware};
+module.exports = { generateToken, authMiddleware };

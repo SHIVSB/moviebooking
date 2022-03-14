@@ -1,5 +1,8 @@
 const User = require("../models/user.model");
 const auth = require("../utils/authentication");
+const { v4: uuidv4 } = require("uuid");
+
+uuidv4();
 
 const userController = {};
 
@@ -20,6 +23,7 @@ userController.signup = async (req, res) => {
 
   //returning the response if the username laready exists in the database
   if (userExists) {
+    console.log("Username already in use. Please select another username");
     responseData.msg = "User already exists";
 
     return res.status(500).send(responseData);
@@ -43,7 +47,7 @@ userController.signup = async (req, res) => {
     //sending the user created info
     return res.status(200).send(responseData);
   } catch (error) {
-    console.log("error in creating the user");
+    console.log(error);
 
     //sending the error response
     return res.status(500).send(responseData);
@@ -53,7 +57,7 @@ userController.signup = async (req, res) => {
 //creating the signin controller
 userController.signin = async (req, res) => {
   //accepting the data via req.body
-  let data = req.body;
+  let { username, loginPassword } = req.body;
 
   //creating the response data
   let responseData = {
@@ -62,22 +66,24 @@ userController.signin = async (req, res) => {
     result: "",
   };
 
-  //if the usernaem and password is provided
-  if (data.username && data.password) {
+  //if the username and password is provided
+  if (username && loginPassword) {
     try {
-      const userFound = await User.findOne({ username: data.username });
+      const userFound = await User.findOne({ username: username });
       // console.log(data.username);
       //console.log(data.password);
 
       //if the user is found anf password matches
-      if (await userFound.isPasswordMatched(data.password)) {
+      if (await userFound.isPasswordMatched(loginPassword)) {
         responseData.msg = "User logged in successfully";
         responseData.success = true;
         responseData.result = userFound;
         responseData.token = auth.generateToken(userFound._id);
+        responseData.id = userFound._id;
         return res.status(200).send(responseData);
       } else {
         //if the credentials do not match
+        console.log("Not matched");
         return res.status(500).send(responseData);
       }
     } catch (error) {
@@ -87,13 +93,14 @@ userController.signin = async (req, res) => {
     }
   } else {
     //if the data entered is insufficient
+    console.log(req.body);
+    console.log(loginPassword);
     responseData.msg = "Insufficient data for login";
-
-    return res.status(500).send(responseData);
+    return res.status(500).send("insufficent data");
   }
 };
 
-userController.getCouponCode = async (req, res) => {
+userController.coupons = async (req, res) => {
   let responseData = {
     msg: "Error in fetching the coupon code",
     success: false,
@@ -122,11 +129,26 @@ userController.getCouponCode = async (req, res) => {
 userController.logout = async (req, res) => {
   try {
     res.clearCookie("authorization");
-    // res.redirect("/");
+    // res.redirect("http://localhost:8085/api/movies");
+
     return res.status(200).send("User logged out successfully");
   } catch (error) {
     return res.status(500).send("Error in logging out the user");
   }
 };
+
+// userController.booking = async (req, res) => {
+//   let responseData = {
+//     msg: "Error in fetching the coupon code",
+//     success: false,
+//     result: "",
+//   };
+
+//   try {
+
+//   } catch (error) {
+//     return res.status(500).send("Error in booing the seat");
+//   }
+// };
 
 module.exports = userController;

@@ -4,7 +4,7 @@ const movieController = require("../controllers/movie.controller");
 
 router.get("", movieController.findallmovies);
 router.get("/:id", movieController.findOne);
-router.get("/status=PUBLISHED", movieController.published);
-router.get("/status=RELEASED", movieController.released);
+router.get("status=PUBLISHED", movieController.published);
+router.get("status=RELEASED", movieController.released);
 
 module.exports = router;

@@ -88,7 +88,11 @@ movieController.released = async (req, res) => {
   };
 
   try {
-    const movies = await Movies.find({ released: true });
+    var movies = await Movies.find({ released: true });
+
+    if (req?.body?.genres) {
+      movies = await Movies.find({ genres: req?.body?.genres });
+    }
 
     responseData.msg = "movie details fetched by status successsfully ";
     responseData.success = true;
